@@ -6,7 +6,13 @@ Rodrigo Zermeño Cervantes
 
 ![Diagrama del sistema](docs/recursos/imgs/ABA56088-C53F-4A26-9F40-42F2E66A7E2C.jpeg)
 
+Fecha: Nací el 23 de octubre del 2007 
+
+Soy un apasionado del mundo automotriz y estoy estudiando Ingenieria Mecatrónica
+
 Leonardo Barrientos Miguel
+
+
 Esta es una **plantilla** basada en [MkDocs](https://www.mkdocs.org/) + [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) para cursos y proyectos.
 
 ---
