@@ -3,6 +3,7 @@
 Nuestros Nombres
 
 Rodrigo Zermeño Cervantes
+
 ![Diagrama del sistema](docs/recursos/imgs/ABA56088-C53F-4A26-9F40-42F2E66A7E2C.jpeg)
 
 Leonardo Barrientos Miguel
