@@ -5,6 +5,9 @@ Esta es una **plantilla** basada en [MkDocs](https://www.mkdocs.org/) + [Materia
 
 ---
 
+![Diagrama del sistema](recursos/imgs/ibero.jpeg)
+
+
 ## Empezar rápido (3 pasos)
 
 1. **Edita el nombre del sitio** en `mkdocs.yml`:
