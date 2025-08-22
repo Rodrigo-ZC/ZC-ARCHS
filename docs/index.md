@@ -13,6 +13,11 @@ Soy un apasionado del mundo automotriz y estoy estudiando Ingenieria Mecatrónic
 Leonardo Barrientos Miguel
 
 
+Fecha de nacimiento: Nací el 23 de octubre del 2007
+
+Me considero a mi mismo un gran fanatico del baloncesto, desde pequeño me gusto el tema de la robótica y en general la ingeniería, es por esto que hoy mismo soy estudiante de ingeniería mecatrónica en la Ibero Puebla.
+
+
 Esta es una **plantilla** basada en [MkDocs](https://www.mkdocs.org/) + [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) para cursos y proyectos.
 
 ---
