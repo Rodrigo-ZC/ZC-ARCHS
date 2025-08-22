@@ -4,7 +4,7 @@
 
 Rodrigo Zermeño Cervantes
 
-![Diagrama del sistema](docs/recursos/imgs/ABA56088-C53F-4A26-9F40-42F2E66A7E2C.jpeg)
+<img src="recursos/imgs/ABA56088-C53F-4A26-9F40-42F2E66A7E2C.jpeg" alt="Diagrama del sistema" width="120">
 
 Fecha de nacimiento: Nací el 23 de octubre del 2007 
 
