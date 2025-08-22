@@ -8,7 +8,7 @@ Rodrigo Zermeño Cervantes
 
 Fecha: Nací el 23 de octubre del 2007 
 
-Soy un apasionado del mundo automotriz y estoy estudiando Ingenieria Mecatrónica
+Soy un apasionado del mundo automotriz,siempre he hecho deporte empece jugando futbol y en este punto de mi vida me apasiona el tenis y el padel,estoy estudiando Ingenieria Mecatrónica en Ibero Puebla
 
 Leonardo Barrientos Miguel
 
