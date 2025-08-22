@@ -1,12 +1,12 @@
 # Presentacion
 
-Nuestros Nombres
+## Autores
 
 Rodrigo Zermeño Cervantes
 
 ![Diagrama del sistema](docs/recursos/imgs/ABA56088-C53F-4A26-9F40-42F2E66A7E2C.jpeg)
 
-Fecha: Nací el 23 de octubre del 2007 
+Fecha de nacimiento: Nací el 23 de octubre del 2007 
 
 Soy un apasionado del mundo automotriz,siempre he hecho deporte empece jugando futbol y en este punto de mi vida me apasiona el tenis y el padel,estoy estudiando Ingenieria Mecatrónica en Ibero Puebla
 
