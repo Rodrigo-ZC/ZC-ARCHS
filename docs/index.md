@@ -34,6 +34,8 @@ Me considero a mi mismo un gran fanatico del baloncesto, usualmente lo practicab
 
 ### Logros de los que estoy orgulloso
 
+Por un lado algo que mencione anterior mente fue el ser parte del equipo representativo de baloncesto de mi preparatoria y no solo eso, si no que llegar a ser del cuadro titutal. Y por otro lado un logro más "academico" que me enorgullece fue haber participado en las olimpiadas nacionales de matematicas y llegar a la fase estatal con un 3er lugar.
+
 
 ## Contactos
 
