@@ -16,7 +16,7 @@ Soy un apasionado del mundo automotriz,siempre he hecho deporte,comencé jugando
 ### Logros
 -Logre un 3er puesto en un torneo de karting categoria avanzada sin haber competido antes.
 
--Me destaco en deportes como el tenis,padel  pickleball
+-Me destaco en deportes como el tenis,padel y pickleball
 
 
 ### Nombre
