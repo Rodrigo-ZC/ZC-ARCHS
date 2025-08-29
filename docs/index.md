@@ -11,7 +11,7 @@ Rodrigo Zermeño Cervantes
  Nací el 23 de octubre del 2007.
 
 ### Intereses
-Soy un apasionado del mundo automotriz,siempre he hecho deporte,comencé jugando futbol y en este punto de mi vida me gusta practicar tenis y padel,estoy estudiando Ingenieria Mecatrónica en Ibero Puebla.
+Soy un apasionado del mundo automotriz y me encanta aprender sobre tecnología y mecánica. Siempre he sido una persona activa; empecé jugando fútbol y hoy en día disfruto practicar tenis y pádel. Actualmente estudio Ingeniería Mecatrónica en la Ibero Puebla, con el objetivo de combinar mi interés por la innovación con mi gusto por los vehículos y la ingeniería.
 
 ### Logros
 -Logre un 3er puesto en un torneo de karting categoria avanzada sin haber competido antes.
