@@ -65,11 +65,3 @@ Leo: 203586@iberopuebla.mx
 
 
 
-
-## Empezar rápido (3 pasos)
-
-1. **Edita el nombre del sitio** en `mkdocs.yml`:
-   ```yaml
-   site_name: docs lr
-   theme:
-     name: material
