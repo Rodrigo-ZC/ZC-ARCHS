@@ -1,4 +1,4 @@
-site_name: Hola
+site_name: Primera página web
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
