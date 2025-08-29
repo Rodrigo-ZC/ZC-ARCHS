@@ -7,9 +7,9 @@ Rodrigo Zermeño Cervantes
 
 <img src="recursos/imgs/ABA56088-C53F-4A26-9F40-42F2E66A7E2C.jpeg" alt="Diagrama del sistema" width="120">
 
-Fecha de nacimiento: Nací el 23 de octubre del 2007 
-
-Soy un apasionado del mundo automotriz,siempre he hecho deporte empece jugando futbol y en este punto de mi vida me apasiona el tenis y el padel,estoy estudiando Ingenieria Mecatrónica en Ibero Puebla
+## Fecha de nacimiento
+ Nací el 23 de octubre del 2007.
+Soy un apasionado del mundo automotriz,siempre he hecho deporte,comencé jugando futbol y en este punto de mi vida me gusta practicar tenis y padel,estoy estudiando Ingenieria Mecatrónica en Ibero Puebla.
 
 
 ### Nombre
@@ -25,8 +25,9 @@ Me considero a mi mismo un gran fanatico del baloncesto, desde pequeño me gusto
 
 ## Contactos
 
+Rodrigo: 203902@iberopuebla.mx
 
-
+Leo:
 
 
 
