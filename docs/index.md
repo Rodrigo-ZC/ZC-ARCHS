@@ -10,7 +10,7 @@ Rodrigo Zermeño Cervantes
 ### Fecha de nacimiento
  Nací el 23 de octubre del 2007.
 
- ### Intereses
+### Intereses
 Soy un apasionado del mundo automotriz,siempre he hecho deporte,comencé jugando futbol y en este punto de mi vida me gusta practicar tenis y padel,estoy estudiando Ingenieria Mecatrónica en Ibero Puebla.
 
 ### Logros
