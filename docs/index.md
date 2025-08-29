@@ -26,15 +26,20 @@ Leonardo Barrientos Miguel
 <img src="recursos/imgs/84F10C39-C547-41EC-B11F-D91EE1FFAF5F.JPG" alt="Diagrama del sistema" width="120">
 
 
-Fecha de nacimiento: Nací el 23 de octubre del 2007
+Nací el 23 de octubre del 2007
 
-Me considero a mi mismo un gran fanatico del baloncesto, desde pequeño me gusto el tema de la robótica y en general la ingeniería, es por esto que hoy mismo soy estudiante de ingeniería mecatrónica en la Ibero Puebla.
+### Mis intereses
+
+Me considero a mi mismo un gran fanatico del baloncesto, usualmente lo practicaba he incluso llegue a estar en el equipo representativo de mi preparatoria. Por otro lado desde pequeño me gusto el tema de la robótica y en general la ingeniería, luego me adentre más en el tema y fue lo de las cosas que mas me gustaron, es por esta razón que hoy mismo soy estudiante de ingeniería mecatrónica en la Ibero Puebla.
+
+### Logros de los que estoy orgulloso
+
 
 ## Contactos
 
 Rodrigo: 203902@iberopuebla.mx
 
-Leo:
+Leo: 203586@iberopuebla.mx
 
 
 
