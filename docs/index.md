@@ -2,6 +2,7 @@
 
 ## Autores
 
+### Nombre
 Rodrigo Zermeño Cervantes
 
 <img src="recursos/imgs/ABA56088-C53F-4A26-9F40-42F2E66A7E2C.jpeg" alt="Diagrama del sistema" width="120">
@@ -9,6 +10,9 @@ Rodrigo Zermeño Cervantes
 Fecha de nacimiento: Nací el 23 de octubre del 2007 
 
 Soy un apasionado del mundo automotriz,siempre he hecho deporte empece jugando futbol y en este punto de mi vida me apasiona el tenis y el padel,estoy estudiando Ingenieria Mecatrónica en Ibero Puebla
+
+
+### Nombre
 
 Leonardo Barrientos Miguel
 
@@ -18,6 +22,29 @@ Leonardo Barrientos Miguel
 Fecha de nacimiento: Nací el 23 de octubre del 2007
 
 Me considero a mi mismo un gran fanatico del baloncesto, desde pequeño me gusto el tema de la robótica y en general la ingeniería, es por esto que hoy mismo soy estudiante de ingeniería mecatrónica en la Ibero Puebla.
+
+## Contactos
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
