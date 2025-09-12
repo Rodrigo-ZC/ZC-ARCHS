@@ -22,6 +22,7 @@ En este primer proyecto realizado en la materia de "Introducción a la Mecatroni
 
 ##Alcance y Exclusiones
 -**Incluye**: calculos realizados por la calculadora "DigiKey" con los materiales que teniamos disponibles para realizar el trabajo y fotos de el foco led tanto encendido como apagado.
+
 -**No Incluye**: foto especifica de los materiales ocupados, sin embargo es posible visualizarlos en las fotografías.
 
 ##Procedimiento
@@ -29,7 +30,7 @@ Lo primero que realizamos fue revisas los diferentes valores de los capacitores 
 
 Nosotros al elegir ocupar las dos resistencias de 200 kiloohms y el capacitos de 22 microfaradios, el tiempo alto que marcaba era de 6.0984 segundos, mientras que el tiempo bajo era de 3.0492 segundos. Si bien el tiempo alto era mayor al permitido, esto era lo más cercano que podiamos realizar con lo que teniamos a la mano, además de que si se logro mantener en el intervalo de tiempo indicado sin sobrepasar los 5 segundos.
 
-
+<img src="recursos/imgs/Calculadora.png" alt="Diagrama del sistema" width="120">
 
 
 
