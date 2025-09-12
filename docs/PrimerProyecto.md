@@ -32,14 +32,17 @@ Nosotros al elegir ocupar las dos resistencias de 200 kiloohms y el capacitos de
 
 
 ![Diagrama del sistema](recursos/imgs/Calculadora.png)
+
 Foto de la calculadora "DigiKey" con los valores ya mencionados
 
 Si bien al inicio no lograbamos obtener buenos resultados incluso un poco despues de terminada la clase, despues de desconectar todo y volver a conectarlo paso a paso y de manera más calmada, fue que logramos que nuestro trabajo resultara funcional y que el led se encendiera y se apagara continuamente en un intervalo de entre 3 y 5 segundos.
 
 
 ![Diagrama del sistema](recursos/imgs/FocoApagado.png)
+
 Captura de pantalla del video en el momento en que el foco estaba apagado.
 
 
 ![Diagrama del sistema](recursos/imgs/FocoEncendido.png)
+
 Captura de pantalla del video en el momento en que el foco esta encendido.
