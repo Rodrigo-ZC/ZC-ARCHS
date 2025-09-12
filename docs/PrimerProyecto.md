@@ -21,9 +21,9 @@ En este primer proyecto realizado en la materia de "Introducción a la Mecatroni
 -OE1: como un objetivo especifico personal de ambos, queriamos lograr comprender mejor todo en cuanto al tema de electronica debido a que anteriormente no habiamos tenido expericencia con esto, al menos no en la preparatoria, por lo que de manera personal, ambos buscabamos poder lograr ampliar nuestros conocimientos en cuanto a este tema.
 
 ##Alcance y Exclusiones
--**Incluye**: calculos realizados por la calculadora "DigiKey" con los materiales que teniamos disponibles para realizar el trabajo y fotos de el foco led tanto encendido como apagado.
+ -**Incluye**: calculos realizados por la calculadora "DigiKey" con los materiales que teniamos disponibles para realizar el trabajo y fotos de el foco led tanto encendido como apagado.
 
--**No Incluye**: foto especifica de los materiales ocupados, sin embargo es posible visualizarlos en las fotografías.
+ -**No Incluye**: foto especifica de los materiales ocupados, sin embargo es posible visualizarlos en las fotografías.
 
 ##Procedimiento
 Lo primero que realizamos fue revisas los diferentes valores de los capacitores y de las resistencias que teneiamos disponibles, en ese momento para realizar el trabajo y de esta manera, con la calculadora poder comprobar el tiempo en que se retrasaba la velocidad de encendido del led.
