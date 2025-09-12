@@ -30,7 +30,8 @@ Lo primero que realizamos fue revisas los diferentes valores de los capacitores 
 
 Nosotros al elegir ocupar las dos resistencias de 200 kiloohms y el capacitos de 22 microfaradios, el tiempo alto que marcaba era de 6.0984 segundos, mientras que el tiempo bajo era de 3.0492 segundos. Si bien el tiempo alto era mayor al permitido, esto era lo más cercano que podiamos realizar con lo que teniamos a la mano, además de que si se logro mantener en el intervalo de tiempo indicado sin sobrepasar los 5 segundos.
 
-<img src="recursos/imgs/Calculadora.png" alt="Diagrama del sistema" width="120">
+
+![Diagrama del sistema](recursos/imgs/Calculadora.png)
 
 
 
