@@ -8,7 +8,7 @@
 
 ###Asignatura: Introducción a la Mecatronica
 
-###Fecha: 5 de Septiembre del 2025
+###Fecha: 12 de Septiembre del 2025
 
 ###Descripción
 
