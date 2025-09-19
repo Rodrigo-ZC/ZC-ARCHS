@@ -27,27 +27,27 @@ En este segundo proyecto  de "Introducción a la Mecatronica" pretendiamos logra
 ##Procedimiento 1
 Lo primero que hicimos fue revisar todo nuestro material  de de trabajo y con una breve introducion de como utilizar nuestro arduino realizamos un circuito el cual estaria conectado a nuestro principal material de trabajo el "Arduino",acto siguiente realizamos un codigo el cual su principal funcion era encender y apagar nuestro led con un pequeño "delay" para lograr precibir  el momento en del encendido y apagado del led
 
-#Codigo 1:
+##Codigo 1:
 
-const int led=33;  // Puerto al que esta conectado el led
+const int led=33; // Puerto del arduino al que esta conectado el led
  
-void setup(){
+void setup() {
 
-   Serial.begin(11520)         ; //Numero de serie de nuestro arduino
+  Serial.begin(115200);
 
-     pinMode(led, OUTPUT);
+  pinMode(led, OUTPUT);
  
- }
+}
  
-void loop() {            
+void loop() {  // Repeticion constante del encendido y apagado
 
-     digitalWrite(led,1); // LED ENCENDIDO
+     digitalWrite(led,1); //Encendido
 
-    delay(1000);  //retraso del encendito y apagado del led
+     delay(1000); // Retraso del encendido y apagado del led
 
-     digitalWrite(led,0); // LED APAGADO
+     digitalWrite(led,0); //Apagado
 
-        delay(1000);
+     delay(1000);
  
   }
 
@@ -65,39 +65,40 @@ Captura de pantalla del video en el momento en que el foco esta encendido.
 
 Tomando como base nuestro primer codigo y circuito, realizamos unos cambios en ambas cosas.Primero le agregamos un boton al circuito con el cual buscabamos encender y apagar el led cuando lo presionaramos,este lo agregamos en el puerto "34" de nuestro arduino.Entonces para que el circuito funcionara tuvimos que agregar otra constante al codigo,agregamos una entrada y pusimos condicionales para cuando presionaramos el boton el led se encendiera y cuando no este permaneciera apagado.
 
-#Codigo 2:
+##Codigo 2:
 
-const int led=33; //LED
+const int led=33; // LED
 
-const int btn=34; // Boton
+const int btn=34; // BOTON
  
 void setup() {
 
   Serial.begin(115200);
 
-  pinMode(led, OUTPUT); //SALIDA
-  
-  pinMode(btn, INPUT); //ENTRADA
+  pinMode(led, OUTPUT); // SALIDA
+
+  pinMode(btn, INPUT); // ENTRADA
+ 
  
 }
  
 void loop() {
-  
+
   int estado = digitalRead(btn); 
  
-  if(estado == 1){ 
-    
-     digitalWrite(led,1);
-   
-    }
-    
+  if(estado == 1){
+
+     digitalWrite(led,1);  // PRENDIDO
+  }
+
   else {
-
-     digitalWrite(led,0);
-
-    }
+    
+    digitalWrite(led,0); // APAGADO
+ 
+  }
  
 }
+ 
  
 
 
@@ -116,6 +117,51 @@ void loop() {
 Para este tercer ejercicio utilizamos la app "Serial Bluetooth Terminal" la cual se conecta al Arduino via Bluetooth y con la terminal que se encuentra en la app podemos mandar señales al arduino para que encienda o apague el led con el codigo que programamos.
 
 Tomamos como base el segundo codigo que realizamos y le hicimos algunas modificaciones, agregamos la libreria #include "BluetoothSerial.h",quitamos la constante del boton y remplazamos su entrada por nuestra conexión Bluetooth la cual la llamamos "LR23", despues remplazamos nuestras condicionales por unas que nos sirvieran con la app y como condición pusimos que al mandar el mensaje "Prende" en la terminal de la app el LED se prenderia, en caso de recibir otro mensaje este se apaga o permanece apagado.
+
+##Codigo 3:
+
+#include "BluetoothSerial.h"
+
+BluetoothSerial SerialBT;
+ 
+const int led=33;
+ 
+ 
+void setup() {
+
+  Serial.begin(115200);
+
+  SerialBT.begin("LR23"); // Dipositivo bluetooth
+
+  pinMode(led, OUTPUT);
+ 
+}
+ 
+void loop() {
+
+  if(SerialBT.available()){
+
+    String mensaje = SerialBT.readString();
+
+    Serial.println("Recibido: " + mensaje);
+
+    if(mensaje == "Prende"){
+
+     digitalWrite(led,1);
+
+    }
+
+    else {
+      
+      digitalWrite(led,0);
+    }
+    
+  }
+ 
+  delay(100);
+ 
+ }
+
 
 
 ![Diagrama del sistema](recursos/imgs/p1.png)
