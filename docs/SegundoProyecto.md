@@ -25,7 +25,7 @@ En este segundo proyecto  de "Introducción a la Mecatronica" pretendiamos logra
  -**No Incluye**: foto especifica de los materiales ocupados, sin embargo es posible visualizarlos en las fotografías.
 
 ##Procedimiento 1
-Lo primero que hicimos fue revisar todo nuestro material  de de trabajo y con una breve introducion de como utilizar nuestro arduino realizamos un circuito en el cual estaria conectado a nuestro principal material de trabajo el "Arduino",acto siguiente realizamos un codigo el cual su principal fucnion era encender y apagar nuestro led con un pequeño "delay" para lograr precibir  el momento en del encendido y apagado del led
+Lo primero que hicimos fue revisar todo nuestro material  de de trabajo y con una breve introducion de como utilizar nuestro arduino realizamos un circuito el cual estaria conectado a nuestro principal material de trabajo el "Arduino",acto siguiente realizamos un codigo el cual su principal funcion era encender y apagar nuestro led con un pequeño "delay" para lograr precibir  el momento en del encendido y apagado del led
 
 #Codigo 1:
 
@@ -110,5 +110,22 @@ void loop() {
 
  Captura de pantalla del video en el momento en el que el boton estaba presionado y el led estaba encendido
 
+
+##Procedimiento 3
+
+Para este tercer ejercicio utilizamos la app "Serial Bluetooth Terminal" la cual se conecta al Arduino via Bluetooth y con la terminal que se encuentra en la app podemos mandar señales al arduino para que encienda o apague el led con el codigo que programamos.
+
+Tomamos como base el segundo codigo que realizamos y le hicimos algunas modificaciones, agregamos la libreria #include "BluetoothSerial.h",quitamos la constante del boton y remplazamos su entrada por nuestra conexión Bluetooth la cual la llamamos "LR23", despues remplazamos nuestras condicionales por unas que nos sirvieran con la app y como condición pusimos que al mandar el mensaje "Prende" en la terminal de la app el LED se prenderia, en caso de recibir otro mensaje este se apaga o permanece apagado.
+
+
+![Diagrama del sistema](recursos/imgs/AFocopre.png)
+
+ Captura de pantalla del video en el momento que se manda el mensaje "Prende" en la terminan y el Led prende (El mensaje "Prende" se mando dos veces y el led permanecio prendido)
+
+
+
+![Diagrama del sistema](recursos/imgs/AFocopre.png)
+
+ Captura de pantalla del video en el momento que se manda el mensaje "a" en la terminan y el Led se apaga
 
 
