@@ -60,3 +60,45 @@ Captura de pantalla del video en el momento en que el foco estaba apagado.
 ![Diagrama del sistema](recursos/imgs/AFocopre.png)
 
 Captura de pantalla del video en el momento en que el foco esta encendido.
+
+##Procedimiento 2
+
+Tomando como base nuestro primer codigo y circuito, realizamos unos cambios en ambas cosas.Primero le agregamos un boton al circuito con el cual buscabamos encender y apagar el led cuando lo presionaramos,este lo agregamos en el puerto "34" de nuestro arduino.Entonces para que el circuito funcionara tuvimos que agregar otra constante al codigo,agregamos una entrada y pusimos condicionales para cuando presionaramos el boton el led se encendiera y cuando no este permaneciera apagado.
+
+#Codigo 2:
+
+const int led=33;
+
+const int btn=34;
+ 
+void setup() {
+
+  Serial.begin(115200);
+
+   pinMode(led, OUTPUT);
+
+   pinMode(btn, INPUT);
+ 
+ 
+}
+ 
+void loop() {
+  
+  int estado = digitalRead(btn);
+ 
+  if(estado == 1){
+    
+     digitalWrite(led,1);
+  
+  }
+
+  else {
+
+    digitalWrite(led,0);
+
+  }
+ 
+ 
+ 
+}
+ 
