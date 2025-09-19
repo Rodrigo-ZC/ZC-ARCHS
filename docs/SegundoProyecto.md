@@ -72,21 +72,30 @@ const int led=33; //LED
 const int btn=34; // Boton
  
 void setup() {
+  
   Serial.begin(115200);
+
   pinMode(led, OUTPUT); //SALIDA
+  
   pinMode(btn, INPUT); //ENTRADA
  
 }
  
 void loop() {
+  
   int estado = digitalRead(btn); 
  
   if(estado == 1){ 
-     digitalWrite(led,1);  //LED ENCIENDE
-  }
+    
+     digitalWrite(led,1);
+   
+    }
+    
   else {
-    digitalWrite(led,0); //LED ESTA APAGADO
-  }
+
+     digitalWrite(led,0);
+
+    }
  
 }
  
