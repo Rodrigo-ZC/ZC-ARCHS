@@ -72,7 +72,7 @@ const int led=33; //LED
 const int btn=34; // Boton
  
 void setup() {
-  
+
   Serial.begin(115200);
 
   pinMode(led, OUTPUT); //SALIDA
@@ -101,11 +101,12 @@ void loop() {
  
 
 
-! [Diagrama del sistema](recursos/imgs/A1.png)
+![Diagrama del sistema](recursos/imgs/A1.png)
 
  Captura de pantalla del video en el momento en que el boton no estaba presionado y el led estaba apagado
 
- ! [Diagrama del sistema](recursos/imgs/A2.png)
+
+![Diagrama del sistema](recursos/imgs/A2.png)
 
  Captura de pantalla del video en el momento en el que el boton estaba presionado y el led estaba encendido
 
