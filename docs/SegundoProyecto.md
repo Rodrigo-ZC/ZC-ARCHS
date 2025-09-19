@@ -68,34 +68,24 @@ Tomando como base nuestro primer codigo y circuito, realizamos unos cambios en a
 #Codigo 2:
 
 const int led=33;
-
 const int btn=34;
  
 void setup() {
-
   Serial.begin(115200);
-
-   pinMode(led, OUTPUT);
-
-   pinMode(btn, INPUT);
+  pinMode(led, OUTPUT);
+  pinMode(btn, INPUT);
  
  
 }
  
 void loop() {
-  
   int estado = digitalRead(btn);
  
   if(estado == 1){
-    
      digitalWrite(led,1);
-  
   }
-
   else {
-
     digitalWrite(led,0);
-
   }
  
  
