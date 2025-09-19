@@ -31,11 +31,11 @@ Lo primero que hicimos fue revisar todo nuestro material  de de trabajo y con un
 
 const int led=33;  // Puerto al que esta conectado el led
  
-void setup() {
+void setup(){
 
-  Serial.begin(115200); //Numero de serie de nuestro arduino
+   Serial.begin(11520)         ; //Numero de serie de nuestro arduino
 
-  pinMode(led, OUTPUT);
+     pinMode(led, OUTPUT);
  
  }
  
