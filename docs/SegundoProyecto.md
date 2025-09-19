@@ -120,7 +120,7 @@ Tomamos como base el segundo codigo que realizamos y le hicimos algunas modifica
 
 ##Codigo 3:
 
-#include "BluetoothSerial.h"
+"#"include "BluetoothSerial.h"
 
 BluetoothSerial SerialBT;
  
