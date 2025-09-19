@@ -52,7 +52,8 @@ void loop() {
   }
 
 
-![Diagrama del sistema](recusos/imgs/AFocoapa.png)
+![Diagrama del sistema](recursos/imgs/AFocoapa.png)
+
 Captura de pantalla del video en el momento en que el foco estaba apagado.
 
 
