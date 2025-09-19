@@ -90,3 +90,15 @@ void loop() {
  
 }
  
+
+
+! [Diagrama del sistema](recursos/imgs/A1.png)
+
+ Captura de pantalla del video en el momento en que el boton no estaba presionado y el led estaba apagado
+
+ ! [Diagrama del sistema](recursos/imgs/A2.png)
+
+ Captura de pantalla del video en el momento en el que el boton estaba presionado y el led estaba encendido
+
+
+
