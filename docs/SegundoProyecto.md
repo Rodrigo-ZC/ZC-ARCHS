@@ -32,16 +32,22 @@ Lo primero que hicimos fue revisar todo nuestro material  de de trabajo y con un
 const int led=33;  // Puerto al que esta conectado el led
  
 void setup() {
+
   Serial.begin(115200); //Numero de serie de nuestro arduino
+
   pinMode(led, OUTPUT);
  
  }
  
-void loop() {            //
+void loop() {            
+
      digitalWrite(led,1); // LED ENCENDIDO
+
     delay(1000);  //retraso del encendito y apagado del led
+
      digitalWrite(led,0); // LED APAGADO
-     delay(1000);
+
+        delay(1000);
  
   }
 
