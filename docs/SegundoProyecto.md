@@ -101,7 +101,7 @@ void loop() {
  
 }
 ```
- s
+
 
 
 ![Diagrama del sistema](recursos/imgs/A1.png)
