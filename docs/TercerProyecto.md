@@ -37,4 +37,30 @@ Aprender a **controlar un motor DC** utilizando un microcontrolador, comprendien
  -**No Incluye**: 
 
 ##Procedimiento
+Primero identificamos los pines de salida del microcontrolador y realizamos las conexiones correspondientes del motor.  
+Una vez conectado, programamos un código sencillo que permitiera **encender el motor en una dirección, detenerlo y hacerlo girar en sentido contrario** con intervalos de tres segundos.  
+Este fue nuestro primer código funcional:
 
+---
+
+###Código 1
+```cpp
+#define in1 32
+#define in2 33
+
+void setup() {
+  pinMode(in1, OUTPUT);
+  pinMode(in2, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(in1,1);
+  digitalWrite(in2,0);
+  delay(3000);
+  digitalWrite(in1,0);
+  digitalWrite(in2,0);
+  delay(3000);
+  digitalWrite(in1,0);
+  digitalWrite(in2,1);
+  delay(3000);
+}
