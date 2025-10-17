@@ -52,7 +52,7 @@ void loop() {  // Repeticion constante del encendido y apagado
      delay(1000);
  
   }
-
+```
 
 ![Diagrama del sistema](recursos/imgs/AFocoapa.png)
 
@@ -68,7 +68,7 @@ Captura de pantalla del video en el momento en que el foco esta encendido.
 Tomando como base nuestro primer codigo y circuito, realizamos unos cambios en ambas cosas.Primero le agregamos un boton al circuito con el cual buscabamos encender y apagar el led cuando lo presionaramos,este lo agregamos en el puerto "34" de nuestro arduino.Entonces para que el circuito funcionara tuvimos que agregar otra constante al codigo,agregamos una entrada y pusimos condicionales para cuando presionaramos el boton el led se encendiera y cuando no este permaneciera apagado.
 
 ##Codigo 2:
-
+```cpp
 const int led=33; // LED
 
 const int btn=34; // BOTON
@@ -100,7 +100,7 @@ void loop() {
   }
  
 }
- 
+ ```
  
 
 
@@ -121,7 +121,7 @@ Para este tercer ejercicio utilizamos la app "Serial Bluetooth Terminal" la cual
 Tomamos como base el segundo codigo que realizamos y le hicimos algunas modificaciones, agregamos la libreria #include "BluetoothSerial.h",quitamos la constante del boton y remplazamos su entrada por nuestra conexión Bluetooth la cual la llamamos "LR23", despues remplazamos nuestras condicionales por unas que nos sirvieran con la app y como condición pusimos que al mandar el mensaje "Prende" en la terminal de la app el LED se prenderia, en caso de recibir otro mensaje este se apaga o permanece apagado.
 
 ##Codigo 3:
-
+```cpp
 "#"include "BluetoothSerial.h"
 
 BluetoothSerial SerialBT;
@@ -163,7 +163,7 @@ void loop() {
   delay(100);
  
  }
-
+```
 
 
 ![Diagrama del sistema](recursos/imgs/p1.png)
