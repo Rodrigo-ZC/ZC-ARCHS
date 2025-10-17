@@ -19,7 +19,7 @@ Usamos los pines digitales y la función `ledcWrite()` para variar la velocidad 
 ##Objetivos
 
 ###General
-Aprender a **controlar un motor DC** utilizando un microcontrolador, comprendiendo el principio básico de funcionamiento de los pines de salida y el control de velocidad por PWM.
+Aprender a **controlar un motor DC** utilizando un microcontrolador, comprendiendo el funcionamiento de los pines de salida y el control de velocidad por PWM.
 
 ###Especificos
 - Programar el encendido y cambio de giro del motor.  
