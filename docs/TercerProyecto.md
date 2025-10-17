@@ -68,6 +68,8 @@ void loop() {
 ```
 
 
+
+
 Como segunda parte de este proyecto, en base a lo anteriormente realizado teniamos que programar el motor de manera que pudiesemos **controlar su velocidad** y que este **aumentara y disminuyera gradualmente** su velocidad en lugar de detenerse o empezar a avanzar repentinamente. Esto debido a que traducido a un motor real, si llegase a suceder, podria ocurrir una perdida de control o incluso un degaste innecesario en el mecanismo.
 
 A continuación el segundo codigo que ocupamos para esta segunda parte del proyecto:
@@ -106,11 +108,15 @@ void loop() {
 }
 ```
 
-A continuación imagenes del motor conectado a un puente H que conectaba con el Arduino/ESP32 para poder recibir la programación de los códigos previamente vistos
+
+
+Lo siguiente son imagenes del motor utilizado asi como de este conectado a un puente H que conectaba con el Arduino/ESP32 para poder recibir la programación de los códigos previamente vistos
 
 ![Diagrama del sistema](recursos/imgs/Motorsolo.jpg)
 
 Foto del motor utilizado en cuestión para este proyecto
 
+
 ![Diagrama del sistema](recursos/imgs/MotorpuenteH.jpg)
 
+Foto del motor utilizado conectado al puente H interconectado con el Arduino/ESP32
