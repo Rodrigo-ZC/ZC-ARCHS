@@ -27,8 +27,10 @@ En este segundo proyecto  de "Introducción a la Mecatronica" pretendiamos logra
 ##Procedimiento 1
 Lo primero que hicimos fue revisar todo nuestro material  de de trabajo y con una breve introducion de como utilizar nuestro arduino realizamos un circuito el cual estaria conectado a nuestro principal material de trabajo el "Arduino",acto siguiente realizamos un codigo el cual su principal funcion era encender y apagar nuestro led con un pequeño "delay" para lograr precibir  el momento en del encendido y apagado del led
 
-##Codigo 1:
+---
 
+##Codigo 1:
+```cpp
 const int led=33; // Puerto del arduino al que esta conectado el led
  
 void setup() {
