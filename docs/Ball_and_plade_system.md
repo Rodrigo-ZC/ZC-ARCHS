@@ -1,6 +1,6 @@
 #Proyecto Final
 
-###Nombre del proyecto:Ball and Plade system
+###Nombre del proyecto: Ball and Plate system
 
 ###Autores
 - Barrientos Miguel Leonardo
@@ -51,6 +51,10 @@ Diseñar y programar un sistema mecatrónico de control de inclinación capaz de
 Se construyó una plataforma con dos niveles:
 
 1- Placa inferior fija, donde se colocan los servomotores.
+
 2- Placa superior móvil, unida mediante rótulas o uniones articuladas.
 
+
 Cada uno de los cuatro servomotores está conectado a un punto distinto de la placa móvil. Al variar el ángulo de los servos, se altera la altura relativa de cada esquina de la plataforma, generando inclinación en dos ejes.
+
+Tambien se incluye una webcam mediante la cual recibimos la imagen del de la parte superior de la plataforma donde es colocada la pelota. El objetivo de esto es que mediante la retroaliemtación visual recibida por parte de la webcam , el sistema pueda compensar perturbaciones y mantener la pelota en la plataforma sin que se caiga de esta.
