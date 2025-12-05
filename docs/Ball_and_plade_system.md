@@ -59,6 +59,8 @@ Cada uno de los cuatro servomotores está conectado a un punto distinto de la pl
 
 Tambien se incluye una webcam mediante la cual recibimos la imagen del de la parte superior de la plataforma donde es colocada la pelota. El objetivo de esto es que mediante la retroaliemtación visual recibida por parte de la webcam , el sistema pueda compensar perturbaciones y mantener la pelota en la plataforma sin que se caiga de esta.
 
+###Programación del código
+
 Por otro lado y probablemente la parte más importante para que funionara el mecanismo, es el codigo, el cual consistio en 2 partes, el codigo realizado en python mediante Visual Studio.
 
 ```cpp
@@ -71,3 +73,4 @@ Y el codigo bluetooth para el arduino y que este pudiese recibir señales de la 
 ```cpp
 
 ```
+
