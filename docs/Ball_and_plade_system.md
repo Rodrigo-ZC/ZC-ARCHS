@@ -477,9 +477,16 @@ void loop(){
 }
 ```
 
+###Funcionamiento de la base
 
+La primera imagen presentada es la imagen de la camara siendo ejecutada y como captura la plataforma y la pelota en ella.
+
+
+
+Mientas que la segunda imagen es la imagen de la plataforma completa junto con el circuito y la pelota en ella.
 
 ![Diagrama del sistema](recursos/imgs/pelota.jfif)
+
 
 
 
