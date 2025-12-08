@@ -66,269 +66,416 @@ Por otro lado y probablemente la parte más importante para que funionara el mec
 ```cpp
 import cv2
 import numpy as np
+import bluetooth
 import time
  
-# ====== OPCIONAL: Bluetooth ======
-BT_ENABLE  = True
-BT_ADDR    = "F4:65:0B:54:F7:46"
-BT_PORT    = 1
-BT_TIMEOUT = 5
+# ========= BLUETOOTH =========
+device_mac = "7C:9E:BD:70:0A:1E"   # MISMA MAC DEL ESP32
+port = 1
  
+# ========= PARÁMETROS SERVOS (2 EJES) =========
+# SERVO_X controla inclinación eje X (izquierda/derecha)
+# SERVO_Y controla inclinación eje Y (arriba/abajo)
+NEUT_X = 180   # neutro a 180°
+NEUT_Y = 180   # neutro a 180°
+ 
+# ----- MODO TEST (para exagerar el movimiento) -----
+TEST_MODE = True   # Cambia a False cuando ya quieras algo más fino
+ 
+if TEST_MODE:
+    # Mucho más movimiento de servos
+    MAX_SERVO_OFFSET_X = 70.0   # rango de inclinación en X (grados)
+    MAX_SERVO_OFFSET_Y = 45.0   # rango de inclinación en Y (grados)
+ 
+    # Control más agresivo y SIN derivada (más fácil ver el sentido)
+    KpX = 2.0
+    KdX = 0.0
+ 
+    KpY = 2.0
+    KdY = 0.0
+else:
+    # Valores más tranquilos para uso normal
+    MAX_SERVO_OFFSET_X = 50.0
+    MAX_SERVO_OFFSET_Y = 40.0
+ 
+    KpX = 0.8
+    KdX = 0.2
+ 
+    KpY = 0.8
+    KdY = 0.2
+ 
+# ====== FLAGS DE ORIENTACIÓN (LOS VAS CAMBIANDO EN VIVO) ======
+INVERT_X = False   # lo puedes cambiar con la tecla 'x'
+INVERT_Y = False   # lo puedes cambiar con la tecla 'y'
+SWAP_AXES = False  # si True, intercambia X<->Y (tecla 's')
+ 
+alpha = 0.8          # filtro para derivada
+MIN_DT_CMD = 0.015   # 15 ms (~66 Hz máx)
+ 
+last_cmd_time = 0.0
+last_time = time.time()
+ 
+last_errx = 0.0
+last_erry = 0.0
+dxf = 0.0
+dyf = 0.0
+ 
+# Centro calibrado de la plataforma (en píxeles de la imagen)
+centerX = None
+centerY = None
+ 
+# Última posición conocida de la pelota (para la tecla 'b')
+last_ball_x = None
+last_ball_y = None
+ 
+# ========= CONEXIÓN BLUETOOTH =========
 sock = None
-if BT_ENABLE:
+print("Intentando conectar al ESP32 por Bluetooth...", device_mac)
+while True:
     try:
-        import bluetooth  # PyBluez
         sock = bluetooth.BluetoothSocket()
-        sock.settimeout(BT_TIMEOUT)
-        print("Conectando a ESP32 via Bluetooth...")
-        sock.connect((BT_ADDR, BT_PORT))
-        print("¡Conectado a ESP32!")
+        sock.settimeout(10)
+        sock.connect((device_mac, port))
+        print(" Conectado al ESP32!")
+        break
     except Exception as e:
-        print("No se pudo conectar BT:", e)
-        print("Continuaré sin BT...")
-        sock = None
-        BT_ENABLE = False
+        print("Error de conexión, reintentando:", e)
+        time.sleep(1)
  
-# ====== Cámara ======
-video = cv2.VideoCapture(0)
-w, h = 640, 480
-video.set(cv2.CAP_PROP_FRAME_WIDTH, w)
-video.set(cv2.CAP_PROP_FRAME_HEIGHT, h)
+# ====== ENVIAR NEUTRO INICIAL A 180° EN LOS 2 SERVOS ======
+try:
+    cmd_init = f"ANG:{NEUT_X},{NEUT_Y}\n"
+    sock.send(cmd_init.encode())
+    last_cmd_time = time.time()
+    print("Posición inicial 180° enviada:", cmd_init.strip())
+except Exception as e:
+    print("⚠️ Error al enviar posición inicial:", e)
  
-# ====== Procesamiento ======
-kernel = np.ones((5, 5), np.uint8)
+# ========= CÁMARA (LA QUE VE LA PLATAFORMA) =========
+# Cambia 1 a 0 si tu otra cámara es la que ve la plataforma
+video = cv2.VideoCapture(1)
  
-# Rojo en HSV (dos bandas)
-bajo1 = np.array([ 0, 100, 100], dtype=np.uint8)
-alto1 = np.array([10, 255, 255], dtype=np.uint8)
-bajo2 = np.array([170, 100, 100], dtype=np.uint8)
-alto2 = np.array([180, 255, 255], dtype=np.uint8)
+# ========= RANGO HSV PARA LA PELOTA (EJEMPLO: NARANJA) =========
+LOWER = np.array([10, 150, 120], np.uint8)
+UPPER = np.array([25, 255, 255], np.uint8)
  
-def circularidad(c):
-    area = cv2.contourArea(c)
-    per = cv2.arcLength(c, True)
-    if per == 0:
-        return 0.0
-    return 4.0 * np.pi * area / (per * per)
- 
-# Centro de referencia (centro de pantalla)
-cx_ref = w // 2
-cy_ref = h // 2
- 
-# Para evitar temblor
-DEAD_X = 10
-DEAD_Y = 10
+kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
  
 while True:
- 
     ok, frame = video.read()
     if not ok:
         break
  
+    # Si la cámara te da la imagen al revés y quieres voltearla:
+    # frame = cv2.flip(frame, 1)
+ 
+    h, w = frame.shape[:2]
+ 
+    # Si aún no hay centro calibrado, por defecto usa el centro de la imagen
+    if centerX is None or centerY is None:
+        centerX = w // 2
+        centerY = h // 2
+ 
+    now = time.time()
+    dt = now - last_time if now > last_time else 0.01
+    send_allowed = (now - last_cmd_time) >= MIN_DT_CMD
+ 
+    # --- Detección de pelota por color ---
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+    mask = cv2.inRange(hsv, LOWER, UPPER)
+    mask = cv2.erode(mask, kernel, iterations=2)
+    mask = cv2.dilate(mask, kernel, iterations=2)
  
-    # ======== DETECCIÓN POR COLOR ========
-    mask1 = cv2.inRange(hsv, bajo1, alto1)
-    mask2 = cv2.inRange(hsv, bajo2, alto2)
-    red_mask = cv2.bitwise_or(mask1, mask2)
+    contornos, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
  
-    red_mask = cv2.morphologyEx(red_mask, cv2.MORPH_OPEN, kernel, iterations=2)
-    red_mask = cv2.morphologyEx(red_mask, cv2.MORPH_CLOSE, kernel, iterations=2)
+    tiene_pelota = False
  
-    contornos, _ = cv2.findContours(red_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if len(contornos) > 0:
+        c = max(contornos, key=cv2.contourArea)
+        (x, y), radio = cv2.minEnclosingCircle(c)
  
-    pelota_x = None
-    pelota_y = None
+        if radio > 5:  # umbral mínimo para ruido
+            tiene_pelota = True
  
-    if contornos:
-        cont = max(contornos, key=cv2.contourArea)
-        area = cv2.contourArea(cont)
-        circ = circularidad(cont)
+            x = int(x)
+            y = int(y)
+            radio = int(radio)
  
-        if area > 200 and circ > 0.5:
-            (x, y), radius = cv2.minEnclosingCircle(cont)
+            # Guardamos última posición de la pelota
+            last_ball_x = x
+            last_ball_y = y
  
-            if radius > 8:
-                pelota_x = int(x)
-                pelota_y = int(y)
+            # Dibujar pelota
+            cv2.circle(frame, (x, y), radio, (255, 0, 0), 2)
+            cv2.circle(frame, (x, y), 3, (255, 0, 0), -1)
  
-                cv2.circle(frame, (pelota_x, pelota_y), int(radius), (0,255,0), 2)
-                cv2.putText(frame, "COLOR", (pelota_x+10, pelota_y),
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+            # Dibujar líneas del centro calibrado
+            cx = int(centerX)
+            cy = int(centerY)
+            cv2.line(frame, (cx, 0), (cx, h), (0, 255, 255), 1)
+            cv2.line(frame, (0, cy), (w, cy), (0, 255, 255), 1)
+            cv2.circle(frame, (cx, cy), 5, (0, 255, 0), -1)  # centro calibrado
  
-    # ======== SI EL COLOR NO DETECTA → HOUGH CIRCLES ========
-    if pelota_x is None:
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        gray = cv2.GaussianBlur(gray, (7,7), 0)
+            # Errores normalizados respecto al centro calibrado
+            errx_img = (x - cx) / (w / 2)   # derecha +, izquierda -
+            erry_img = (y - cy) / (h / 2)   # abajo +, arriba -
  
-        circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 50,
-                                   param1=80, param2=25,
-                                   minRadius=5, maxRadius=120)
+            # Posible intercambio de ejes
+            if SWAP_AXES:
+                errx_raw = erry_img
+                erry_raw = errx_img
+            else:
+                errx_raw = errx_img
+                erry_raw = erry_img
  
-        if circles is not None:
-            circles = np.round(circles[0]).astype("int")
-            x, y, r = circles[0]
+            # Invertir si hace falta (lo cambias en vivo con 'x' y 'y')
+            if INVERT_X:
+                errx_raw = -errx_raw
+            if INVERT_Y:
+                erry_raw = -erry_raw
  
-            pelota_x = x
-            pelota_y = y
+            # Mostrar errores crudos para debug
+            cv2.putText(frame, f"Ex:{errx_raw:+.2f} Ey:{erry_raw:+.2f}",
+                        (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.6,
+                        (255, 255, 255), 2)
  
-            cv2.circle(frame, (x, y), r, (0,255,255), 2)
-            cv2.putText(frame, "CIRCULO", (x+10, y),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,255), 2)
+            # --- Control PD ---
+            derx = (errx_raw - last_errx) / dt
+            dery = (erry_raw - last_erry) / dt
  
-    # ======== SI SE DETECTÓ PELOTA → CALCULAR ERRORES ========
-    if pelota_x is not None:
+            dxf = alpha * dxf + (1 - alpha) * derx
+            dyf = alpha * dyf + (1 - alpha) * dery
  
-        # Centro de la base
-        cv2.drawMarker(frame, (cx_ref, cy_ref), (255,255,255),
-                        cv2.MARKER_CROSS, 20, 2)
+            uX = KpX * errx_raw + KdX * dxf
+            uY = KpY * erry_raw + KdY * dyf
  
-        # Errores
-        error_x = pelota_x - cx_ref
-        error_y = pelota_y - cy_ref
+            # Limitamos uX, uY a [-1,1]
+            uX = float(np.clip(uX, -1.0, 1.0))
+            uY = float(np.clip(uY, -1.0, 1.0))
  
-        # Zona muerta
-        if abs(error_x) < DEAD_X: error_x = 0
-        if abs(error_y) < DEAD_Y: error_y = 0
+            # Offset de servos en grados (cada servo controla un eje)
+            servo_off_X = uX * MAX_SERVO_OFFSET_X
+            servo_off_Y = uY * MAX_SERVO_OFFSET_Y
  
-        # Enviar coordenadas NUMÉRICAS
-        msg = f"{error_x},{error_y}\n"
-        if BT_ENABLE and sock is not None:
-            sock.send(msg.encode())
+            # Ángulos lógicos absolutos
+            ang_x = NEUT_X - servo_off_X   # SERVO eje X
+            ang_y = NEUT_Y - servo_off_Y   # SERVO eje Y
  
-        print("ENVIADO →", msg.strip())
+            # Limitar a 0..180
+            ang_x = int(np.clip(ang_x, 0, 180))
+            ang_y = int(np.clip(ang_y, 0, 180))
  
-        # Línea visual
-        cv2.line(frame, (cx_ref, cy_ref), (pelota_x, pelota_y), (0,255,0), 2)
+            cv2.putText(frame,
+                        f"X:{ang_x}  Y:{ang_y}",
+                        (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.6,
+                        (0, 255, 255), 2)
  
-    else:
-        print("Pelota NO detectada")
+            # --- Enviar comando ANG: (2 servos: X,Y) ---
+            if send_allowed:
+                try:
+                    cmd = f"ANG:{ang_x},{ang_y}\n"
+                    sock.send(cmd.encode())
+                    # print("CMD ->", cmd.strip())
+                    last_cmd_time = now
+                except Exception as e:
+                    print("⚠️ Error al enviar ANG:", e)
  
-    # Mostrar
-    cv2.imshow("TRACKING", frame)
-    cv2.imshow("MÁSCARA ROJO", red_mask)
+            last_errx = errx_raw
+            last_erry = erry_raw
+            last_time = now
  
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if not tiene_pelota:
+        cv2.putText(frame, "PELOTA NO DETECTADA", (10, 25),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7,
+                    (0, 0, 255), 2)
+        # Si pierdes la pelota, manda NEUTROS → 180° en los 2 servos
+        if send_allowed:
+            try:
+                cmd_lost = f"ANG:{NEUT_X},{NEUT_Y}\n"
+                sock.send(cmd_lost.encode())
+                last_cmd_time = now
+                # print("CMD LOST-NEUTRO ->", cmd_lost.strip())
+            except Exception as e:
+                print("⚠️ Error al enviar NEUTRO (sin pelota):", e)
+ 
+    # Mostrar estado de flags
+    status = f"invX:{INVERT_X}  invY:{INVERT_Y}  swap:{SWAP_AXES}  TEST:{TEST_MODE}"
+    cv2.putText(frame, status, (10, h - 10),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+ 
+    cv2.imshow("Ball Balancing Control", frame)
+    cv2.imshow("Mascara", mask)
+ 
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('q'):
         break
+    elif key == ord('c'):
+        # Tecla 'c' para centrar manualmente (180° en ambos)
+        try:
+            cmd_c = f"ANG:{NEUT_X},{NEUT_Y}\n"
+            sock.send(cmd_c.encode())
+            last_cmd_time = time.time()
+            print("Comando CENTRO 180° enviado.")
+        except Exception as e:
+            print("⚠️ Error al enviar CENTRO:", e)
+    elif key == ord('x'):
+        INVERT_X = not INVERT_X
+        print("INVERT_X ->", INVERT_X)
+    elif key == ord('y'):
+        INVERT_Y = not INVERT_Y
+        print("INVERT_Y ->", INVERT_Y)
+    elif key == ord('s'):
+        SWAP_AXES = not SWAP_AXES
+        print("SWAP_AXES ->", SWAP_AXES)
+    elif key == ord('b'):
+        # Calibrar centro con la pelota en el centro físico
+        if last_ball_x is not None and last_ball_y is not None:
+            centerX = last_ball_x
+            centerY = last_ball_y
+            print(f"Centro calibrado en ({centerX}, {centerY})")
  
-# ====== Limpieza ======q
 video.release()
+sock.close()
 cv2.destroyAllWindows()
-if BT_ENABLE and sock is not None:
-    try: sock.close()
-    except: pass
 ```
 
 Y el codigo en Arduino para bluetooth y de esta manera este pudiese recibir señales de la webcam.
 
 
 ```cpp
+#include <Arduino.h>
 #include "BluetoothSerial.h"
- 
 BluetoothSerial SerialBT;
- 
-// ================================
-// PID
-// ================================
-float kp = 0.8;
-float ki = 0.01;
-float kd = 0.8;
- 
-float t_now = 0;
-float t_bef = 0;
-float dt = 0;
-float integralX = 0;
-float errorX_ant = 0;
- 
-// ================================
-// Servos por PWM (ESP32 LEDC)
-// ================================
-#define SERVO_ARRIBA     32
-#define SERVO_ABAJO      33
-#define SERVO_DERECHA    25
-#define SERVO_IZQUIERDA  26
- 
-// Map de servo en ESP32: 0°=125, 180°=250
-int mapServo(int ang) {
-  return map(ang, 0, 180, 125, 250);
+// === Buffer para lectura BT no bloqueante ===
+String btBuffer;
+// === Pines de los servos ===
+// SERVO_X controla eje X
+// SERVO_Y controla eje Y
+#define SERVO_X   21
+#define SERVO_Y   19
+// === PWM ===
+const uint32_t FREQ_HZ = 50;
+const uint8_t  RES_BITS = 12;
+const uint16_t DUTY_MIN = 205;   // ~1.0 ms
+const uint16_t DUTY_MAX = 410;   // ~2.0 ms
+// Convierte grados físicos 0..180 a duty
+uint16_t dutyFromDeg(int deg){
+  deg = constrain(deg,0,180);
+  return map(deg,0,180,DUTY_MIN,DUTY_MAX);
 }
- 
-void setup() {
+// Convierte de ángulo lógico (0..180) a físico (invertido)
+int logicalToPhysical(int logicalDeg){
+  logicalDeg = constrain(logicalDeg, 0, 180);
+  // 0 lógico → 180 físico, 180 lógico → 0 físico
+  return 180 - logicalDeg;
+}
+// Escribe usando grados lógicos
+void writeServoLogical(int pin, int logicalDeg){
+  int fisico = logicalToPhysical(logicalDeg);
+  ledcWrite(pin, dutyFromDeg(fisico));
+}
+// Configurar servo con ángulo lógico inicial
+void configServo(int pin, int initialLogical){
+  pinMode(pin,OUTPUT);
+  ledcAttach(pin,FREQ_HZ,RES_BITS);   // usa el pin como canal
+  writeServoLogical(pin,initialLogical);
+}
+// === Rango y rampa ===
+const int LIM_MIN = 0;
+const int LIM_MAX = 180;
+const int PASO_RAMPA = 45;          // tamaño de paso en rampa
+const uint32_t DT_RAMP_MS = 2;
+const uint32_t TIMEOUT_MS = 700;
+// Estado en grados LÓGICOS (arrancan en 180)
+int posX = 180;
+int posY = 180;
+int tgtX = 180;
+int tgtY = 180;
+uint32_t tPrevRamp = 0;
+uint32_t tLastCmd  = 0;
+// Rampa suave hacia el objetivo
+void aplicarRampa(){
+  uint32_t now = millis();
+  if(now - tPrevRamp < DT_RAMP_MS) return;
+  tPrevRamp = now;
+  auto go = [&](int actual,int target){
+    if(actual < target) return min(actual + PASO_RAMPA, target);
+    if(actual > target) return max(actual - PASO_RAMPA, target);
+    return actual;
+  };
+  posX = go(posX, tgtX);
+  posY = go(posY, tgtY);
+  // Escribimos usando grados LÓGICOS, se invierten adentro
+  writeServoLogical(SERVO_X, posX);
+  writeServoLogical(SERVO_Y, posY);
+}
+// Parsea "ANG:x,y"
+bool parseAngulos(const String &msg, int &aX, int &aY){
+  if (!msg.startsWith("ANG:")) return false;
+  String data = msg.substring(4);  // después de "ANG:"
+  int c1 = data.indexOf(',');
+  if (c1 < 0) return false;
+  String sX = data.substring(0, c1);
+  String sY = data.substring(c1 + 1);
+  sX.trim();
+  sY.trim();
+  aX = sX.toInt();
+  aY = sY.toInt();
+  return true;
+}
+// ======== SETUP ========
+void setup(){
   Serial.begin(115200);
-  SerialBT.begin("bandida");
- 
-  // asignar PWM
-  ledcAttach(SERVO_ARRIBA, 50, 8);
-  ledcAttach(SERVO_ABAJO, 50, 8);
-  ledcAttach(SERVO_DERECHA, 50, 8);
-  ledcAttach(SERVO_IZQUIERDA, 50, 8);
- 
-  t_bef = millis();
+  SerialBT.begin("fina");
+  // Ambos servos arrancan en 180 lógico
+  configServo(SERVO_X, posX);
+  configServo(SERVO_Y, posY);
+  Serial.println("ESP32 listo (2 servos X/Y, neutro 180°)");
+  tLastCmd = millis();
 }
- 
-void loop() {
- 
-  // ==========================================
-  // RECIBIR COORDENADAS: "X Y"
-  // ==========================================
-  if (SerialBT.available()) {
- 
-    String line = SerialBT.readStringUntil('\n');
- 
-    int spaceIndex = line.indexOf(' ');
-    if (spaceIndex == -1) return; // formato incorrecto
- 
-    int errorX = line.substring(0, spaceIndex).toInt();
-    int errorY = line.substring(spaceIndex+1).toInt();
- 
-    // limitar rangos
-    errorX = constrain(errorX, -320, 320);
-    errorY = constrain(errorY, -240, 240);
- 
-    // ==========================================
-    // PID SOLO EN X (puedo activarte el de Y si quieres)
-    // ==========================================
-    t_now = millis();
-    dt = (t_now - t_bef);
- 
-    float P = kp * errorX;
-    integralX += errorX * dt;
-    float I = ki * integralX;
-    float D = kd * ((errorX - errorX_ant) / dt);
- 
-    float pidX = P + I + D;
- 
-    errorX_ant = errorX;
-    t_bef = t_now;
- 
-    // ==========================================
-    // MOVER SERVOS SEGÚN X Y Y (con PID en X)
-    // ==========================================
- 
-    int servoArriba =  90 - errorY / 10;
-    int servoAbajo =   90 + errorY / 10;
- 
-    // PID en X
-    int servoDerecha =  90 + pidX / 10;
-    int servoIzquierda = 90 - pidX / 10;
- 
-    // límites seguros
-    servoArriba = constrain(servoArriba, 30, 150);
-    servoAbajo = constrain(servoAbajo, 30, 150);
-    servoDerecha = constrain(servoDerecha, 30, 150);
-    servoIzquierda = constrain(servoIzquierda, 30, 150);
- 
-    // Escritura PWM
-    ledcWrite(SERVO_ARRIBA, mapServo(servoArriba));
-    ledcWrite(SERVO_ABAJO, mapServo(servoAbajo));
-    ledcWrite(SERVO_DERECHA, mapServo(servoDerecha));
-    ledcWrite(SERVO_IZQUIERDA, mapServo(servoIzquierda));
- 
-    Serial.println("Servo R=" + String(servoDerecha) + " L=" + String(servoIzquierda));
+// ======== LOOP ========
+void loop(){
+  // --- Lectura Bluetooth no bloqueante ---
+  while (SerialBT.available()) {
+    char c = (char)SerialBT.read();
+    if (c == '\n') {
+      // Tenemos una línea completa en btBuffer
+      String msg = btBuffer;
+      btBuffer = "";        // limpiar para el siguiente mensaje
+      msg.trim();
+      if (msg.length() > 0) {
+        tLastCmd = millis();
+        if (msg == "ZERO") {
+          // Todos a 0 lógico (→ 180 físico por inversión)
+          tgtX = 0;
+          tgtY = 0;
+          Serial.println("Comando ZERO: X/Y → 0 lógico (180 físico)");
+        } else {
+          int aX, aY;
+          if (parseAngulos(msg, aX, aY)) {
+            tgtX = constrain(aX, LIM_MIN, LIM_MAX);
+            tgtY = constrain(aY, LIM_MIN, LIM_MAX);
+            Serial.printf("ANG -> X:%d  Y:%d\n", tgtX, tgtY);
+          } else {
+            Serial.print("Comando desconocido: ");
+            Serial.println(msg);
+          }
+        }
+      }
+    } else if (c != '\r') {
+      // Acumulamos caracteres, ignorando CR
+      btBuffer += c;
+    }
   }
- 
-  delay(15);
+  // Si pasa mucho tiempo sin recibir comandos, vuelve al neutro 180
+  if(millis() - tLastCmd > TIMEOUT_MS){
+    tgtX = 180;
+    tgtY = 180;
+  }
+  aplicarRampa();
+  delay(1);
 }
 ```
+
 
 
