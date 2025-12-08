@@ -479,3 +479,7 @@ void loop(){
 
 
 
+![Diagrama del sistema](recursos/imgs/Calculadora.png)
+
+
+
