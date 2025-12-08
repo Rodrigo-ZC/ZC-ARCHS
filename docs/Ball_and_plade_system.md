@@ -55,9 +55,18 @@ Se construyó una plataforma con dos niveles:
 2- Placa superior móvil, unida mediante rótulas o uniones articuladas.
 
 
-Cada uno de los cuatro servomotores está conectado a un punto distinto de la placa móvil. Al variar el ángulo de los servos, se altera la altura relativa de cada esquina de la plataforma, generando inclinación en dos ejes.
+Cada uno de los dos servomotores está conectado a un punto distinto de la placa móvil. Al variar el ángulo de los servos, se altera la altura relativa de cada esquina de la plataforma, generando inclinación en dos ejes.
 
 Tambien se incluye una webcam mediante la cual recibimos la imagen del de la parte superior de la plataforma donde es colocada la pelota. El objetivo de esto es que mediante la retroaliemtación visual recibida por parte de la webcam , el sistema pueda compensar perturbaciones y mantener la pelota en la plataforma sin que se caiga de esta.
+
+Especificaciones: 
+
+- Los servos que ocupamos fueron unos Servomotores Mg996r 15kg de 180º
+   Y las siguentes medidas:
+      -Longitud del cable: 30cm, cable de señal (amarillo), rojo (alimentación), marrón (masa).
+      -Tamaño :40.7 * 19.7 * 42.9mm
+  
+- Por otro lado la plataforma fue realizada con madera mdf de un grosor de 3 mm con un área de 20 * 20 cm.
 
 ###Programación del código
 
@@ -486,6 +495,7 @@ La primera imagen presentada es la imagen de la camara siendo ejecutada y como c
 Mientas que la segunda imagen es la imagen de la plataforma completa junto con el circuito y la pelota en ella.
 
 ![Diagrama del sistema](recursos/imgs/pelota.jfif)
+
 
 
 
