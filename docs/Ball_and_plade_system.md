@@ -63,10 +63,14 @@ Especificaciones:
 
 - Los servos que ocupamos fueron unos Servomotores Mg996r 15kg de 180º
    Y las siguentes medidas:
+
       -Longitud del cable: 30cm, cable de señal (amarillo), rojo (alimentación), marrón (masa).
+
       -Tamaño :40.7 * 19.7 * 42.9mm
   
 - Por otro lado la plataforma fue realizada con madera mdf de un grosor de 3 mm con un área de 20 * 20 cm.
+  
+- Por ultimo, se realizo una base en forma de cruz para sostener los servos de forma horizontal, la cual cada parte tenia una longitud aproximada a 12.5 cm con un ancho de 5 cm y un alto de 3 cm, defando en cada esquina un compartimento para el servo, con las medidas exactas de estos.
 
 ###Programación del código
 
@@ -495,6 +499,7 @@ La primera imagen presentada es la imagen de la camara siendo ejecutada y como c
 Mientas que la segunda imagen es la imagen de la plataforma completa junto con el circuito y la pelota en ella.
 
 ![Diagrama del sistema](recursos/imgs/pelota.jfif)
+
 
 
 
