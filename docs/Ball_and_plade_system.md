@@ -479,7 +479,8 @@ void loop(){
 
 
 
-![Diagrama del sistema](recursos/imgs/Calculadora.png)
+![Diagrama del sistema](recursos/imgs/pelota.jfif)
+
 
 
 
