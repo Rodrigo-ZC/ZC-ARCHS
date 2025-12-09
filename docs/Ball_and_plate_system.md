@@ -77,7 +77,7 @@ Especificaciones:
 
 - Por otra parte, se procedió al diseño y fabricación de un par de brazos destinados a acoplarse a los servomotores. Esta configuración, al conectar los brazos a la plataforma y mantenerlos sujetos a los servos, permitió el correcto proceso de nivelación de la plataforma.
 
-  ![Diagrama del sistema](recursos/imgs/Baseservomotor.jpg)
+  ![Diagrama del sistema](recursos/imgs/Soporte.jpg)
 
 
 ###Programación del código
@@ -523,6 +523,7 @@ Mientas que la segunda imagen es la imagen de la plataforma completa junto con e
 Y para finalizar, subimos a youtube un video con los resultados del mecanismo funionando correctamente.
 
 Link: youtube.com/watch?si=ySMpmDCWlPXWW_h-&v=5i9Qri7ijuo&feature=youtu.be
+
 
 
 
