@@ -76,23 +76,29 @@ Especificaciones:
 
 Por otro lado y probablemente la parte más importante para que funionara el mecanismo, es el codigo, el cual consistio en 2 partes, el codigo realizado en python mediante Visual Studio.
 
+El código desarrollado en Visual Studio tiene como propósito realizar el procesamiento visual y el control principal del sistema Ball and Plate. Su función consiste en detectar en tiempo real la posición de una pelota sobre la plataforma y generar las señales de corrección necesarias para mantenerla en equilibrio.
+
+Para lograr esto, el programa utiliza una cámara conectada al sistema para capturar video en vivo. Mediante técnicas de visión artificial (OpenCV), identifica la pelota a través de un filtrado por color en el espacio HSV y determina sus coordenadas dentro del cuadro de imagen. Una vez obtenida la posición, el algoritmo calcula el error respecto al centro de la plataforma y aplica un control del tipo PD (Proporcional–Derivativo) para generar una respuesta dinámica y estable.
+
+El resultado de este cálculo se traduce en dos ángulos de inclinación (eje X y eje Y), los cuales se envían de manera continua al microcontrolador ESP32 mediante comunicación Bluetooth. Finalmente, estos valores serán interpretados por el sistema Arduino/ESP32 para ajustar los servomotores y así modificar la inclinación de la base física.
+
 ```cpp
 import cv2
 import numpy as np
 import bluetooth
 import time
  
-# ========= BLUETOOTH =========
+# = BLUETOOTH =
 device_mac = "7C:9E:BD:70:0A:1E"   # MISMA MAC DEL ESP32
 port = 1
  
-# ========= PARÁMETROS SERVOS (2 EJES) =========
+# =PARÁMETROS SERVOS (2 EJES) =
 # SERVO_X controla inclinación eje X (izquierda/derecha)
 # SERVO_Y controla inclinación eje Y (arriba/abajo)
 NEUT_X = 180   # neutro a 180°
 NEUT_Y = 180   # neutro a 180°
  
-# ----- MODO TEST (para exagerar el movimiento) -----
+#  MODO TEST (para exagerar el movimiento) 
 TEST_MODE = True   # Cambia a False cuando ya quieras algo más fino
  
 if TEST_MODE:
@@ -117,7 +123,7 @@ else:
     KpY = 0.8
     KdY = 0.2
  
-# ====== FLAGS DE ORIENTACIÓN (LOS VAS CAMBIANDO EN VIVO) ======
+# = FLAGS DE ORIENTACIÓN (LOS VAS CAMBIANDO EN VIVO) =
 INVERT_X = False   # lo puedes cambiar con la tecla 'x'
 INVERT_Y = False   # lo puedes cambiar con la tecla 'y'
 SWAP_AXES = False  # si True, intercambia X<->Y (tecla 's')
@@ -141,7 +147,7 @@ centerY = None
 last_ball_x = None
 last_ball_y = None
  
-# ========= CONEXIÓN BLUETOOTH =========
+# = CONEXIÓN BLUETOOTH =
 sock = None
 print("Intentando conectar al ESP32 por Bluetooth...", device_mac)
 while True:
@@ -155,20 +161,20 @@ while True:
         print("Error de conexión, reintentando:", e)
         time.sleep(1)
  
-# ====== ENVIAR NEUTRO INICIAL A 180° EN LOS 2 SERVOS ======
+# = ENVIAR NEUTRO INICIAL A 180° EN LOS 2 SERVOS =
 try:
     cmd_init = f"ANG:{NEUT_X},{NEUT_Y}\n"
     sock.send(cmd_init.encode())
     last_cmd_time = time.time()
     print("Posición inicial 180° enviada:", cmd_init.strip())
 except Exception as e:
-    print("⚠️ Error al enviar posición inicial:", e)
+    print(" Error al enviar posición inicial:", e)
  
-# ========= CÁMARA (LA QUE VE LA PLATAFORMA) =========
+# = CÁMARA (LA QUE VE LA PLATAFORMA) =
 # Cambia 1 a 0 si tu otra cámara es la que ve la plataforma
 video = cv2.VideoCapture(1)
  
-# ========= RANGO HSV PARA LA PELOTA (EJEMPLO: NARANJA) =========
+# =RANGO HSV PARA LA PELOTA (EJEMPLO: NARANJA) =
 LOWER = np.array([10, 150, 120], np.uint8)
 UPPER = np.array([25, 255, 255], np.uint8)
  
@@ -252,7 +258,7 @@ while True:
                         (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.6,
                         (255, 255, 255), 2)
  
-            # --- Control PD ---
+            # - Control PD -
             derx = (errx_raw - last_errx) / dt
             dery = (erry_raw - last_erry) / dt
  
@@ -283,7 +289,7 @@ while True:
                         (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.6,
                         (0, 255, 255), 2)
  
-            # --- Enviar comando ANG: (2 servos: X,Y) ---
+            # Enviar comando ANG: (2 servos: X,Y) 
             if send_allowed:
                 try:
                     cmd = f"ANG:{ang_x},{ang_y}\n"
@@ -291,7 +297,7 @@ while True:
                     # print("CMD ->", cmd.strip())
                     last_cmd_time = now
                 except Exception as e:
-                    print("⚠️ Error al enviar ANG:", e)
+                    print(" Error al enviar ANG:", e)
  
             last_errx = errx_raw
             last_erry = erry_raw
@@ -309,7 +315,7 @@ while True:
                 last_cmd_time = now
                 # print("CMD LOST-NEUTRO ->", cmd_lost.strip())
             except Exception as e:
-                print("⚠️ Error al enviar NEUTRO (sin pelota):", e)
+                print(" Error al enviar NEUTRO (sin pelota):", e)
  
     # Mostrar estado de flags
     status = f"invX:{INVERT_X}  invY:{INVERT_Y}  swap:{SWAP_AXES}  TEST:{TEST_MODE}"
@@ -330,7 +336,7 @@ while True:
             last_cmd_time = time.time()
             print("Comando CENTRO 180° enviado.")
         except Exception as e:
-            print("⚠️ Error al enviar CENTRO:", e)
+            print(" Error al enviar CENTRO:", e)
     elif key == ord('x'):
         INVERT_X = not INVERT_X
         print("INVERT_X ->", INVERT_X)
@@ -354,12 +360,18 @@ cv2.destroyAllWindows()
 
 Y el codigo en Arduino para bluetooth y de esta manera este pudiese recibir señales desde la terminal de python.
 
+El código implementado en el ESP32 tiene como propósito recibir, interpretar y ejecutar los comandos de control enviados desde el programa en Python, con el fin de mover los servomotores que inclinan la plataforma del sistema Ball and Plate. Su función principal es actuar como la interfaz física entre el algoritmo de control y el mecanismo real.
+
+A través del módulo Bluetooth interno del ESP32, el microcontrolador recibe continuamente mensajes en el formato “ANG:x,y”, los cuales representan los ángulos lógicos de los servomotores para los ejes X y Y. Una vez recibido un comando, el programa lo analiza, lo valida y lo convierte en un ángulo físico real, tomando en cuenta la inversión mecánica de los servos para que los movimientos correspondan correctamente a las direcciones generadas por el controlador.
+
+El sistema incorpora una rampa de movimiento suave, diseñada para evitar saltos bruscos que puedan generar vibraciones o inestabilidad en la plataforma. Esta rampa ajusta gradualmente la posición de los servos hasta alcanzar el ángulo objetivo, mejorando el desempeño dinámico y reduciendo el desgaste mecánico. Asimismo, el código implementa un mecanismo de seguridad que devuelve automáticamente los servos a su posición neutra si no se recibe ningún comando en un tiempo determinado.
+
 
 ```cpp
 #include <Arduino.h>
 #include "BluetoothSerial.h"
 BluetoothSerial SerialBT;
-// === Buffer para lectura BT no bloqueante ===
+// Buffer para lectura BT no bloqueante 
 String btBuffer;
 // === Pines de los servos ===
 // SERVO_X controla eje X
@@ -393,7 +405,7 @@ void configServo(int pin, int initialLogical){
   ledcAttach(pin,FREQ_HZ,RES_BITS);   // usa el pin como canal
   writeServoLogical(pin,initialLogical);
 }
-// === Rango y rampa ===
+//  Rango y rampa 
 const int LIM_MIN = 0;
 const int LIM_MAX = 180;
 const int PASO_RAMPA = 45;          // tamaño de paso en rampa
@@ -436,7 +448,7 @@ bool parseAngulos(const String &msg, int &aX, int &aY){
   aY = sY.toInt();
   return true;
 }
-// ======== SETUP ========
+// SETUP 
 void setup(){
   Serial.begin(115200);
   SerialBT.begin("fina");
@@ -446,7 +458,7 @@ void setup(){
   Serial.println("ESP32 listo (2 servos X/Y, neutro 180°)");
   tLastCmd = millis();
 }
-// ======== LOOP ========
+// LOOP 
 void loop(){
   // --- Lectura Bluetooth no bloqueante ---
   while (SerialBT.available()) {
