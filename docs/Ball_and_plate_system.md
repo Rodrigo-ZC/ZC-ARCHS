@@ -358,9 +358,7 @@ sock.close()
 cv2.destroyAllWindows()
 ```
 
-Y el codigo en Arduino para bluetooth y de esta manera este pudiese recibir señales desde la terminal de python.
-
-El código implementado en el ESP32 tiene como propósito recibir, interpretar y ejecutar los comandos de control enviados desde el programa en Python, con el fin de mover los servomotores que inclinan la plataforma del sistema Ball and Plate. Su función principal es actuar como la interfaz física entre el algoritmo de control y el mecanismo real.
+El código de Arduno implementado en el ESP32 tiene como propósito recibir, interpretar y ejecutar los comandos de control enviados desde el programa en Python, con el fin de mover los servomotores que inclinan la plataforma del sistema Ball and Plate. Su función principal es actuar como la interfaz física entre el algoritmo de control y el mecanismo real.
 
 A través del módulo Bluetooth interno del ESP32, el microcontrolador recibe continuamente mensajes en el formato “ANG:x,y”, los cuales representan los ángulos lógicos de los servomotores para los ejes X y Y. Una vez recibido un comando, el programa lo analiza, lo valida y lo convierte en un ángulo físico real, tomando en cuenta la inversión mecánica de los servos para que los movimientos correspondan correctamente a las direcciones generadas por el controlador.
 
@@ -373,12 +371,12 @@ El sistema incorpora una rampa de movimiento suave, diseñada para evitar saltos
 BluetoothSerial SerialBT;
 // Buffer para lectura BT no bloqueante 
 String btBuffer;
-// === Pines de los servos ===
+// Pines de los servos
 // SERVO_X controla eje X
 // SERVO_Y controla eje Y
 #define SERVO_X   21
 #define SERVO_Y   19
-// === PWM ===
+// PWM
 const uint32_t FREQ_HZ = 50;
 const uint8_t  RES_BITS = 12;
 const uint16_t DUTY_MIN = 205;   // ~1.0 ms
@@ -391,7 +389,7 @@ uint16_t dutyFromDeg(int deg){
 // Convierte de ángulo lógico (0..180) a físico (invertido)
 int logicalToPhysical(int logicalDeg){
   logicalDeg = constrain(logicalDeg, 0, 180);
-  // 0 lógico → 180 físico, 180 lógico → 0 físico
+  // 0 lógico -> 180 físico, 180 lógico → 0 físico
   return 180 - logicalDeg;
 }
 // Escribe usando grados lógicos
@@ -434,7 +432,7 @@ void aplicarRampa(){
   writeServoLogical(SERVO_X, posX);
   writeServoLogical(SERVO_Y, posY);
 }
-// Parsea "ANG:x,y"
+//  "ANG:x,y"
 bool parseAngulos(const String &msg, int &aX, int &aY){
   if (!msg.startsWith("ANG:")) return false;
   String data = msg.substring(4);  // después de "ANG:"
@@ -460,7 +458,7 @@ void setup(){
 }
 // LOOP 
 void loop(){
-  // --- Lectura Bluetooth no bloqueante ---
+  // Lectura Bluetooth no bloqueante 
   while (SerialBT.available()) {
     char c = (char)SerialBT.read();
     if (c == '\n') {
@@ -471,7 +469,7 @@ void loop(){
       if (msg.length() > 0) {
         tLastCmd = millis();
         if (msg == "ZERO") {
-          // Todos a 0 lógico (→ 180 físico por inversión)
+          // Todos a 0 lógico (180 físico por inversión)
           tgtX = 0;
           tgtY = 0;
           Serial.println("Comando ZERO: X/Y → 0 lógico (180 físico)");
