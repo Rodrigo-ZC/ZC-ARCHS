@@ -512,6 +512,12 @@ Mientas que la segunda imagen es la imagen de la plataforma completa junto con e
 
 
 
+Y para finalizar, subimos a youtube un video con los resultados del mecanismo funionando correctamente.
+
+Link: youtube.com/watch?si=ySMpmDCWlPXWW_h-&v=5i9Qri7ijuo&feature=youtu.be
+
+
+
 
 
 
