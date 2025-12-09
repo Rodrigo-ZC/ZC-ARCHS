@@ -70,7 +70,7 @@ Especificaciones:
   
 - Por otro lado la plataforma fue realizada con madera mdf de un grosor de 3 mm con un área de 20 * 20 cm.
   
-- Por ultimo, se realizo una base en forma de cruz para sostener los servos de forma horizontal, la cual cada parte tenia una longitud aproximada a 14 cm con un ancho de 3.5 cm y un alto de 2 cm, defando en cada esquina un compartimento para el servo, con las medidas exactas de estos. Ademas de una parte central de 3.5*3.5*2cm la cual unia estos brazos entre si mediante unos tubos los cuales tenian 1cm de diametro y los cuales extruimos 2 cm para que pudiesen unirse a los brazos de la base.
+- Por ultimo, se realizo una base en forma de cruz para sostener los servos de forma horizontal, la cual cada parte tenia una longitud aproximada a 14 cm con un ancho de 3.5 cm y un alto de 2 cm, defando en cada esquina un compartimento para el servo, con las medidas exactas de estos. Ademas de una parte central de 3.5 * 3.5 * 2cm la cual unia estos brazos entre si mediante unos tubos los cuales tenian 1cm de diametro y los cuales extruimos 2 cm para que pudiesen unirse a los brazos de la base.
 
   ![Diagrama del sistema](recursos/imgs/Baseservomotor.jpg)
 
@@ -517,6 +517,7 @@ Mientas que la segunda imagen es la imagen de la plataforma completa junto con e
 Y para finalizar, subimos a youtube un video con los resultados del mecanismo funionando correctamente.
 
 Link: youtube.com/watch?si=ySMpmDCWlPXWW_h-&v=5i9Qri7ijuo&feature=youtu.be
+
 
 
 
