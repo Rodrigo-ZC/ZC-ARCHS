@@ -352,7 +352,7 @@ sock.close()
 cv2.destroyAllWindows()
 ```
 
-Y el codigo en Arduino para bluetooth y de esta manera este pudiese recibir señales de la webcam.
+Y el codigo en Arduino para bluetooth y de esta manera este pudiese recibir señales desde la terminal de python.
 
 
 ```cpp
